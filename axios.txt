@@ -1,0 +1,197 @@
+// src/components/UserTableAxios.tsx
+
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+const UserTableAxios: React.FC = () => {
+  const [users, setUsers] = useState<User[]>([]);
+
+  useEffect(() => {
+    axios.get('https://jsonplaceholder.typicode.com/users')
+      .then((response) => {
+        setUsers(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data with axios:', error);
+      });
+  }, []);
+
+  return (
+        <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-md-8 col-lg-6">
+          <div className="card shadow-lg border-0">
+            <div className="card-body">
+              <h2 className="card-title text-center mb-4 text-primary">User List (Using Axios)</h2>
+              <div className="table-responsive">
+                <table className="table table-bordered table-hover align-middle">
+                  <thead className="table-primary">
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {users.length > 0 ? (
+                      users.map((user) => (
+                        <tr key={user.id}>
+                          <td>{user.id}</td>
+                          <td>{user.name}</td>
+                          <td>{user.email}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={3} className="text-center">Loading...</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default UserTableAxios;
+-----------------------------------------------------------------------------------------------------------
+
+import React, { useEffect, useState } from 'react'; // Import React and hooks
+import axios from 'axios'; // Import axios for HTTP requests
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+const UserTableAxios: React.FC = () => {
+  const [users, setUsers] = useState<User[]>([]); // State to store user data
+
+  useEffect(() => {
+    axios.get('https://jsonplaceholder.typicode.com/users') // Fetch users from API
+      .then((response) => {
+        setUsers(response.data); // Set users state with API data
+      })
+      .catch((error) => {
+        console.error('Error fetching data with axios:', error); // Log error if fetch fails
+      });
+  }, []); // Empty dependency array means this runs once on mount
+
+  return (
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-md-8 col-lg-6">
+          <div className="card shadow-lg border-0">
+            <div className="card-body">
+              <h2 className="card-title text-center mb-4 text-primary">User List (Using Axios)</h2>
+              <div className="table-responsive">
+                <table className="table table-bordered table-hover align-middle">
+                  <thead className="table-primary">
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {users.length > 0 ? ( // If users exist, map and show rows
+                      users.map((user) => (
+                        <tr key={user.id}>
+                          <td>{user.id}</td>
+                          <td>{user.name}</td>
+                          <td>{user.email}</td>
+                        </tr>
+                      ))
+                    ) : ( // Otherwise, show loading row
+                      <tr>
+                        <td colSpan={3} className="text-center">Loading...</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  ); // End of return
+};
+
+export default UserTableAxios; // Export the component
+------------------------------------------------------------------------------------------------------------
+try-catch-example
+  
+// src/components/UserTableAxios.tsx
+
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+const UserTableAxios: React.FC = () => {
+  const [users, setUsers] = useState<User[]>([]);
+  const [error, setError] = useState<string>('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('https://jsonplaceholder.typicode.com/users');
+        setUsers(response.data);
+      } catch (err) {
+        console.error('Axios error:', err);
+        setError('Failed to fetch data.');
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  return (
+    <div className="container mt-5">
+      <h2>User List (Using Axios + Try/Catch)</h2>
+      {error && <div className="alert alert-danger">{error}</div>}
+      <table className="table table-bordered">
+        <thead className="table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.length > 0 ? (
+            users.map((user) => (
+              <tr key={user.id}>
+                <td>{user.id}</td>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={3}>Loading...</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default UserTableAxios;
